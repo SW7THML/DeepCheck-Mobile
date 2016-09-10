@@ -123,4 +123,6 @@ class deepcheck extends Component {
   }
 }
 
-AppRegistry.registerComponent('deepcheck', () => deepcheck);
+//AppRegistry.registerComponent('deepcheck', () => deepcheck);
+var Main = require('./src/main')
+AppRegistry.registerComponent('deepcheck', () => Main);
