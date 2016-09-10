@@ -1,6 +1,7 @@
 package com.deepcheck;
 
 import com.facebook.react.ReactActivity;
+import com.imagepicker.ImagePickerPackage;
 
 public class MainActivity extends ReactActivity {
 

@@ -10,17 +10,18 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    marginTop: 10,
   },
   listview: {
-    flexDirection: 'row',
-    paddingRight: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9e9e9',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    flexWrap: 'wrap'
   },
   listitem: {
-    fontSize: 20,
-    textAlign: 'left',
-    margin: 10,
+    width: 350,
+    height: 60,
+    alignItems: 'center',
+
   },
   welcome: {
     fontSize: 20,
@@ -36,5 +37,9 @@ module.exports = StyleSheet.create({
     borderRadius: 75,
     width: 150,
     height: 150
+  },
+  text: {
+    marginTop: 5,
+    fontWeight: 'bold'
   }
 });

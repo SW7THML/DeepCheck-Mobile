@@ -1,5 +1,13 @@
-import React, { Component, PropTypes } from 'react';
-import { Text, TouchableHighlight, View } from 'react-native';
+import React, { 
+  Component,
+  PropTypes 
+} from 'react';
+
+import { 
+  Text,
+  TouchableHighlight, 
+  View 
+} from 'react-native';
 
 class Scene extends Component {
   static propTypes = {

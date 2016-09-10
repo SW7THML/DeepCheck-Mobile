@@ -20,6 +20,7 @@ var Platform = require('react-native').Platform;
 var FileUpload = require('NativeModules').FileUpload;
 // var Listitem = require('react-native-listitem');
 
+//import GridView from './include/gridview.js';
 import Scene from './include/scene.js';
 var imagePicker = require('./include/image-picker.js').imagePicker;
 var styles = require('./include/styles.js');
@@ -31,8 +32,7 @@ class deepcheck extends Component {
   state = {
     avatarSource: null,
     videoSource: null,
-    dataSource: ds.cloneWithRows(
-      [])
+    dataSource: ds.cloneWithRows([])
   };
 
   constructor(props, context) {
@@ -97,28 +97,67 @@ class deepcheck extends Component {
     });
   }
 
-  render() {
+  _pressRow(rowData) {
+
+  }
+
+  _renderRow(rowData) {
     return (
-      <View style={styles.container}>
-        <ListView
-          style={styles.listview}
-          dataSource={this.state.dataSource}
-          renderRow={
-            (rowData) => 
-            <Text
-              onPress={()=>{
-              }} 
-              style={styles.listitem}>{rowData.name}
-            </Text>}
-        />
-        <Button
-          style={{fontSize: 20, color: 'green'}}
-          styleDisabled={{color: 'red'}}
-          onPress={() => this._handlePress()}>
-          Press Me!
-        </Button>
-        <Image source={this.state.avatarSource} style={styles.avatar}/>
-      </View>
+      <TouchableHighlight onPress={this._pressRow}>
+        <View style={styles.listitem}>
+          <Text style={styles.text}>
+            {rowData.id}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
+  render() {
+    const routes = [
+      {title: 'Classes', index: 0},
+      {title: 'ClassName', index: 1},
+    ];
+    return (
+      <Navigator
+        initialRoute={routes[0]}
+        initialRouteStack={routes}
+        renderScene={(route, navigator) =>
+          <View style={styles.container}>
+            <TouchableHighlight onPress={() => {
+              if (route.index === 0) {
+                navigator.push(routes[1]);
+                
+              } else {
+                navigator.pop();
+              }
+            }}>
+
+              // <Text style={styles.text}>
+              //   deepcheck
+              // </Text>
+              // <ListView contentContainerStyle={styles.listview}
+              //   dataSource={this.state.dataSource}
+              //   renderRow={this._renderRow}
+              // />
+
+              // <Button
+              //   style={{fontSize: 20, color: 'green'}}
+              //   styleDisabled={{color: 'red'}}
+              //   onPress={() => this._handlePress()}>
+              //   Press Me!
+              // </Button>
+
+              // <Image source={this.state.avatarSource} style={styles.avatar}/>
+
+            <Text>Hello {route.title}!</Text>
+            </TouchableHighlight>
+          </View>
+
+          
+        }
+        style={{padding: 100}}
+      />
     );
   }
 }
