@@ -3,8 +3,6 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  Modal,
-  TouchableHighlight,
   StyleSheet,
   Text,
   View
@@ -14,16 +12,10 @@ var LinkingIOS = require('LinkingIOS');
 var qs = require('qs');
 
 
-
 class deepcheck extends Component {
   constructor(props, context) {
     super(props, context);
-
-    this.state = {
-      modalVisible: false,
-      modalMessage: null
-    };
-
+    this.state = {};
     this._processURL = this._processURL.bind(this);
   }
 
@@ -33,10 +25,6 @@ class deepcheck extends Component {
 
   componentWillUnmount() {
     LinkingIOS.removeEventListener('url', this._processURL);
-  }
-
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
   }
 
   _processURL(e) {
@@ -51,14 +39,28 @@ class deepcheck extends Component {
     fetch('http://localhost:3000/api/courses/4')
       .then((response) => response.json())
       .then((course) => {
-        var message = course['name'];
-
-        this.setState({
-          modalVisible: true,
-          modalMessage: message,
-        })
+        console.log("name = ");
+        console.log(course['name']);
+        return course;
       })
       .done();
+
+    // fetch('http://localhost:3000/api/courses/4')
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     return responseJson.name;
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+
+    //fetch('http://localhost:3000/')
+    // fetch('http://localhost:3000/api/courses/8')
+    //  .then((response) => console.log(response))
+    //  .done();
+
+    // console.log(fetch('http://localhost:3000/api/courses/8'));
+    // do something here based on `path` and `params`
   }
 
   render() {
@@ -74,29 +76,6 @@ class deepcheck extends Component {
           Press Cmd+R to reload,{'\n'}
           Cmd+D or shake for dev menu
         </Text>
-
-        <Modal
-          animationType={"slide"}
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}
-          >
-         <View style={{marginTop: 22}}>
-
-          <View style = {{backgroundColor: 'skyblue'}}>
-
-            <TouchableHighlight onPress={() => {
-              this.setModalVisible(!this.state.modalVisible)
-            }}>
-              <Text style={styles.white}>X</Text>
-            </TouchableHighlight>
-          </View>
-
-          <View>      
-            <Text style={styles.coursename}>{this.state.modalMessage}</Text>
-          </View>
-         </View>
-        </Modal>
       </View>
     );
   }
@@ -118,16 +97,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
-  coursename: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 30,
-  },
-  white: {
-    textAlign: 'right',
-    color: 'white',
-    fontSize: 20,
   },
 });
 
