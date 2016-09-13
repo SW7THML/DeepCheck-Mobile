@@ -7,9 +7,11 @@ import {
   TouchableHighlight,
   StyleSheet,
   Text,
+  Image,
   View
 } from 'react-native';
 
+import AwesomeButton from 'react-native-awesome-button';
 var LinkingIOS = require('LinkingIOS');
 var qs = require('qs');
 
@@ -88,13 +90,26 @@ class deepcheck extends Component {
             <TouchableHighlight onPress={() => {
               this.setModalVisible(!this.state.modalVisible)
             }}>
-              <Text style={styles.white}>X</Text>
+              <Text style={styles.white}>Exit </Text>
             </TouchableHighlight>
           </View>
 
-          <View>      
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>      
+            <Image source={require('./circle.png')} style={{height: 200, width: 200, marginTop: 60, marginBottom:10}}/>
             <Text style={styles.coursename}>{this.state.modalMessage}</Text>
           </View>
+
+          <View style={styles.joinbutton}>
+            <AwesomeButton states={{
+              default: {
+              text: 'Enroll',
+              onPress: this.handleButtonPress,
+              backgroundColor: '#1155DD'
+              }
+             }} />
+          </View>
+
+
          </View>
         </Modal>
       </View>
@@ -126,9 +141,12 @@ const styles = StyleSheet.create({
   },
   white: {
     textAlign: 'right',
-    color: 'white',
     fontSize: 20,
+    margin: 1,
   },
+  joinbutton: {
+    margin: 50,
+  }
 });
 
 AppRegistry.registerComponent('deepcheck', () => deepcheck);

@@ -9,6 +9,8 @@
     "ios": "0.0.1",
     "react": "^15.3.1",
     "react-native": "^0.33.0",
+    "react-native-awesome-button": "^1.6.0",
+    "react-native-linear-gradient": "^1.5.12",
     "react-native-material-kit": "^0.3.2",
     "react-native-modal": "^0.4.0"
   }
