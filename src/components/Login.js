@@ -18,7 +18,7 @@ var server = "http://127.0.0.1:3000"
 
 var FileUpload = require('NativeModules').FileUpload;
 
-var Login = React.createClass({
+var Page = React.createClass({
   getInitialState: function(){
     return {
       user: null,
@@ -44,7 +44,7 @@ var Login = React.createClass({
     var user = this.state.user;
 
     return (
-      <View style={styles.loginContainer}>
+      <View style={styles.container}>
 
         { user && <Photo user={user} /> }
         { user && <Info user={user} /> }
@@ -193,7 +193,7 @@ var Info = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  loginContainer: {
+  container: {
     marginTop: 150,
 
     flex: 1,
@@ -205,4 +205,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = Login;
+module.exports = Page;
