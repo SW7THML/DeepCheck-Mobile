@@ -37,6 +37,7 @@ var Course = require('./models/courses');
 var Preview = require('./views/preview');
 var Login = require('./views/login');
 // tabs
+var Web = require('./views/web');
 var Courses = require('./views/courses');
 var CourseDetail = require('./views/course_detail');
 var CourseCreate = require('./views/course_create');
@@ -137,7 +138,11 @@ class App extends React.Component {
             key="tabCourse"
             title="Courses"
             icon={TabIcon}
+            hideNavBar
             >
+              <Scene
+                key="web" component={Web}
+              />
               <Scene
                 key="courses" component={Courses} title="Courses"
                 onRight={() => Actions.courseCreate()}

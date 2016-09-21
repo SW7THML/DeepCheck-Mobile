@@ -2,7 +2,7 @@ var Constant = require('../constant')
 
 var Http = {
   get: (path, params, callback) => {
-    fetch(Constant.SERVER + path, {
+    fetch(Constant.SERVER.API + path, {
       method: "GET",
       headers: {
         'Accept': 'application/json',
@@ -22,7 +22,7 @@ var Http = {
   },
 
   post: (path, params, callback) => {
-    fetch(Constant.SERVER + path, {
+    fetch(Constant.SERVER.API + path, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -42,7 +42,7 @@ var Http = {
   },
 
   put: (path, params, callback) => {
-    fetch(Constant.SERVER + path, {
+    fetch(Constant.SERVER.API + path, {
       method: "PUT",
       headers: {
         'Accept': 'application/json',
@@ -62,7 +62,7 @@ var Http = {
   },
 
   delete: (path, params, callback) => {
-    fetch(Constant.SERVER + path, {
+    fetch(Constant.SERVER.API + path, {
       method: "DELETE",
       headers: {
         'Accept': 'application/json',
