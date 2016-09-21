@@ -13,7 +13,7 @@ var Page = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text>Course Detail</Text>
+        <Text>Error</Text>
       </View>
     );
   }
