@@ -50,15 +50,7 @@ var Page = React.createClass({
   },
 
   signup: function(data) {
-    var obj = {
-      uploadUrl: SERVER + '/users',
-      method: 'POST',
-      fields: {
-        token: data.token
-      }
-    };
-    console.log(obj);
-    fetch(SERVER + "/users", {
+    fetch(SERVER + "/api/users", {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -114,6 +106,8 @@ var Page = React.createClass({
             console.log("Existing login found.");
             console.log(data);
             _this.setState({ user : data.credentials });
+
+            _this.signup(data.credentials);
           }}
           onLoginNotFound={function(){
             console.log("No user logged in.");
@@ -131,8 +125,6 @@ var Page = React.createClass({
             console.log(data);
           }}
         />
-
-        <Text>{ user ? user.token : "N/A" }</Text>
       </View>
     );
   }
@@ -175,16 +167,6 @@ var Photo = React.createClass({
 
     return (
       <View style={styles.bottomBump}>
-
-        <Image
-          style={photo &&
-            {
-              height: photo.height,
-              width: photo.width,
-            }
-          }
-          source={{uri: photo && photo.url}}
-        />
       </View>
     );
   },
@@ -231,9 +213,7 @@ var Info = React.createClass({
 
     return (
       <View style={styles.bottomBump}>
-        <Text>{ info && this.props.user.userId }</Text>
-        <Text>{ info && info.name }</Text>
-        <Text>{ info && info.email }</Text>
+        <Text>Loading</Text>
       </View>
     );
   }

@@ -4,7 +4,7 @@ import {
   AsyncStorage,
   Linking
 } from 'react-native';
-import {Actions, Scene, Router} from 'react-native-router-flux';
+import {Actions, ActionConst, Scene, Router} from 'react-native-router-flux';
 
 var Constant = require('./constant');
 var Course = require('./models/courses');
@@ -52,37 +52,69 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 
+    console.log('contructor');
+    this.processURL = this.processURL.bind(this);
+    this.handleOpenURL = this.handleOpenURL.bind(this);
+
 		this.state = {
 			tokenLoaded: false,
 			loggedIn: false,
 		};
 	}
 
+  componentWillMount() {
+    console.log('will mount');
+  }
+
   componentDidMount() {
     this._isAuthenticated().done();
-    Linking.addEventListener('url', this._handleOpenURL);
+    var self = this;
+    Linking.getInitialURL().then(function(url) {
+      console.log('get', url);
+      if (url.length > 0) {
+        //window.scheme = url;
+        self.processURL(url, false);
+      }
+    });
+    Linking.addEventListener('url', this.handleOpenURL);
+    console.log('did mount');
   }
 
   componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleOpenURL);
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
 
-  _handleOpenURL(event) {
-    console.log('Initial url is: ' + event.url);
-
-    var scheme = event.url.split("://")[0];
+  processURL(url, open) {
+    console.log('process', url);
+    var scheme = url.split("://")[0];
 		if(scheme == "deepcheck") {
-			var path = event.url.split("://")[1];
+			var path = url.split("://")[1];
 			var action = path.split("?")[0];
 			var params = path.split("?")[1];
 			var courseId = params.split("=")[1];
 
 			if(action == "join") {
-				Course.join(courseId, (res) => {
-					console.log("joined", res.course);
-				})
+      var url = 'http://localhost:3000/courses/' + courseId + '/preview';
+        //alert(url);
+        //Actions.refresh({url: url});
+        //Actions.pop();
+        window.scheme_url = url;
+        //Actions.webview({url: url});
+        if(open) {
+          Actions.webview({url: url});
+        }
+        //Actions.tabs();
+        console.log('schemed');
+				//Course.join(courseId, (res) => {
+				//	console.log("joined", res.course);
+				//})
 			}
 		}
+  }
+
+  handleOpenURL(event) {
+    console.log('Initial url is: ' + event.url);
+    this.processURL(event.url, true);
   }
 
 	async _isAuthenticated() {
@@ -98,7 +130,7 @@ class App extends React.Component {
 
 			this.setState({
 				tokenLoaded: true,
-				loggedIn: true
+				loggedIn: false // FIXME origin: true
 			})
 		} else {
 			this.setState({
@@ -110,7 +142,7 @@ class App extends React.Component {
 
   render() {
 		if(this.state.tokenLoaded) {
-			return <Router getSceneStyle={getSceneStyle}>
+			return <Router>
 				<Scene key="root">
 					<Scene key="intro" hideNavBar hideTabBar initial={!this.state.loggedIn}>
 						<Scene
@@ -128,6 +160,14 @@ class App extends React.Component {
 							leftTitle = "More"
 						/>
 					</Scene>
+          <Scene key="webview"
+            hideNavBar
+            hideTabBar
+            initial={true}
+            component={Web}
+            clone={true}
+          >
+          </Scene>
           <Scene key="tabs"
             tabs
             tabBarStyle={Styles.tabBarStyle}

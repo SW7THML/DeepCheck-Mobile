@@ -30,19 +30,44 @@
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  
+  NSLog(@"%@", @"PersisteWebCookie");
+  NSData *cookiesdata = [[NSUserDefaults standardUserDefaults] objectForKey:@"MySavedCookies"];
+  if([cookiesdata length]) {
+    NSArray *cookies = [NSKeyedUnarchiver unarchiveObjectWithData:cookiesdata];
+    NSHTTPCookie *cookie;
+    
+    for (cookie in cookies) {
+      [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    }
+  }
+  NSLog(@"%@", @"PersisteWebCookie Restored");
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  return YES;
+  
+//  NSURL *url = [launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
+//  if (url){
+//    [[NSUserDefaults standardUserDefaults] setURL:url forKey:@"scheme"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//  }
+  
   return [[FBSDKApplicationDelegate sharedInstance] application:application
                                   didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
   [FBSDKAppEvents activateApp];
+  
+//  NSURL *url = [[NSUserDefaults standardUserDefaults] URLForKey:@"scheme"];
+//  if(url) {
+//    [self application:application handleOpenURL:url];
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"scheme"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//  }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
@@ -57,6 +82,14 @@
                                                 sourceApplication:sourceApplication
                                                        annotation:annotation];
   }
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  NSLog(@"%@", @"PersisteWebCookie");
+  NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+  NSData *cookieData = [NSKeyedArchiver archivedDataWithRootObject:cookies];
+  [[NSUserDefaults standardUserDefaults] setObject:cookieData forKey:@"MySavedCookies"];
+  NSLog(@"%@", @"PersisteWebCookie Saved");
 }
 
 @end
