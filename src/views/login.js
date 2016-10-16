@@ -1,4 +1,3 @@
-'use strict';
 var React = require('react');
 var ReactNative = require('react-native');
 
@@ -7,36 +6,76 @@ var {
   Image,
   Text,
   View,
+  AsyncStorage
 } = ReactNative;
 
 var {FBLogin, FBLoginManager} = require('react-native-facebook-login');
-var FBLoginMock = require('./facebook/FBLoginMock.js');
 
 var FB_PHOTO_WIDTH = 200;
 
-var server = "http://127.0.0.1:3000"
+var SERVER = "http://127.0.0.1:3000";
+var Constant = require('../constant');
 
-var FileUpload = require('NativeModules').FileUpload;
+var TOKEN_KEY = Constant.KEYS.TOKEN;
+var EMAIL_KEY = Constant.KEYS.EMAIL;
 
-var Login = React.createClass({
-  getInitialState: function(){
+var Page = React.createClass({
+  getInitialState: function() {
+    this._isAuthenticated();
     return {
       user: null,
     };
   },
 
+  async _isAuthenticated() {
+    var token = await AsyncStorage.getItem(TOKEN_KEY);
+    var email = await AsyncStorage.getItem(EMAIL_KEY);
+    console.log('token', token);
+    console.log('email', email);
+    if(token != undefined && token.length > 0) {
+      window.headers = {
+        token: token,
+        email: email
+      };
+      Actions.tabs();
+    }
+  },
+
+  async _onValueChange(key, value) {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
+    }
+  },
+
   signup: function(data) {
-    var obj = {
-      uploadUrl: server + '/users',
-      method: 'POST',
-      fields: {
+    fetch(SERVER + "/api/users", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         token: data.token
-      }
-    };
-    console.log(obj);
-    FileUpload.upload(obj, function(err, result) {
-      console.log('upload:', err, result);
+      })
     })
+    .then((response) => response.json())
+    .then((responseData) => {
+      console.log(responseData);
+      var token = responseData.user.authentication_token;
+      var email = responseData.user.email;
+
+      this._onValueChange(TOKEN_KEY, token);
+      this._onValueChange(EMAIL_KEY, email);
+
+      window.headers = {
+        token: token,
+        email: email
+      };
+      Actions.tabs();
+    })
+    .done();
   },
 
   render: function() {
@@ -44,7 +83,7 @@ var Login = React.createClass({
     var user = this.state.user;
 
     return (
-      <View style={styles.loginContainer}>
+      <View style={styles.container}>
 
         { user && <Photo user={user} /> }
         { user && <Info user={user} /> }
@@ -67,6 +106,8 @@ var Login = React.createClass({
             console.log("Existing login found.");
             console.log(data);
             _this.setState({ user : data.credentials });
+
+            _this.signup(data.credentials);
           }}
           onLoginNotFound={function(){
             console.log("No user logged in.");
@@ -84,8 +125,6 @@ var Login = React.createClass({
             console.log(data);
           }}
         />
-
-        <Text>{ user ? user.token : "N/A" }</Text>
       </View>
     );
   }
@@ -128,16 +167,6 @@ var Photo = React.createClass({
 
     return (
       <View style={styles.bottomBump}>
-
-        <Image
-          style={photo &&
-            {
-              height: photo.height,
-              width: photo.width,
-            }
-          }
-          source={{uri: photo && photo.url}}
-        />
       </View>
     );
   },
@@ -184,18 +213,15 @@ var Info = React.createClass({
 
     return (
       <View style={styles.bottomBump}>
-        <Text>{ info && this.props.user.userId }</Text>
-        <Text>{ info && info.name }</Text>
-        <Text>{ info && info.email }</Text>
+        <Text>Loading</Text>
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  loginContainer: {
+  container: {
     marginTop: 150,
-
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -205,4 +231,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = Login;
+module.exports = Page;
