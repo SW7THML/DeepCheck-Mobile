@@ -29,15 +29,38 @@ var Page = React.createClass({
     console.log("url", url);
 
     return {
-      url: url
+      url: url,
+      canGoBack: false
     };
+  },
+
+  backHandler: function() {
+    if(this.state.canGoBack) {
+      this.refs[WEBVIEW_REF].goBack();
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  componentDidMount: function() {
+    ReactNative.BackAndroid.addEventListener('hardwareBackPress', this.backHandler);
+  },
+
+  componentWillUnmount: function() {
+     ReactNative.BackAndroid.removeEventListener('hardwareBackPress', this.backHandler);
   },
 
   onNavigationStateChange: function(navState) {
     console.log("changed", navState);
     this.setState({
-      url: navState.url
+      url: navState.url,
+      canGoBack: navState.canGoBack
     })
+  },
+
+  goBack: function() {
+    this.refs[WEBVIEW_REF].goBack();
   },
 
   render: function() {
@@ -51,7 +74,8 @@ var Page = React.createClass({
           //'X-User-Token': window.headers.token,
           //'X-User-Email': window.headers.email
         }}}
-        style={{marginTop: 20}}
+        onNavigationStateChange={this.onNavigationStateChange}
+        style={{marginTop: 0}}
       />
     );
   }

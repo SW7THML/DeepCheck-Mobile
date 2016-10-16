@@ -49,6 +49,8 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
+  [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+  
 //  NSURL *url = [launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
 //  if (url){
 //    [[NSUserDefaults standardUserDefaults] setURL:url forKey:@"scheme"];
