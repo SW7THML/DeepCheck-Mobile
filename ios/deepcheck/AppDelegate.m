@@ -12,8 +12,8 @@
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
 
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
+//#import <FBSDKCoreKit/FBSDKCoreKit.h>
+//#import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 #import "RCTLinkingManager.h"
 
@@ -57,12 +57,14 @@
 //    [[NSUserDefaults standardUserDefaults] synchronize];
 //  }
   
-  return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                  didFinishLaunchingWithOptions:launchOptions];
+  return true;
+  
+  //return [[FBSDKApplicationDelegate sharedInstance] application:application
+  //                                didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-  [FBSDKAppEvents activateApp];
+  //[FBSDKAppEvents activateApp];
   
 //  NSURL *url = [[NSUserDefaults standardUserDefaults] URLForKey:@"scheme"];
 //  if(url) {
@@ -78,12 +80,13 @@
   if([[url scheme] isEqualToString:@"deepcheck"]) {
     return [RCTLinkingManager application:application openURL:url
                         sourceApplication:sourceApplication annotation:annotation];
-  } else {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
+  }// else {
+    /*return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                           openURL:url
                                                 sourceApplication:sourceApplication
-                                                       annotation:annotation];
-  }
+                                                       annotation:annotation];*/
+  //}
+  return false;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

@@ -16,6 +16,8 @@
     "react-native-gifted-form": "0.0.13",
     "react-native-image-picker": "^0.22.2",
     "react-native-listitem": "^1.0.5",
-    "react-native-router-flux": "^3.35.0"
+    "react-native-router-flux": "^3.35.0",
+    "react-native-webview": "^1.0.8",
+    "react-native-webview-android": "^1.1.10"
   }
 }

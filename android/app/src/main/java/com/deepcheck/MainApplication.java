@@ -8,6 +8,9 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.burnweb.rnwebview.RNWebViewPackage;
+//import com.heng.webview.WebViewPackage;
+//import com.imagepicker.ImagePickerPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +26,12 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+          new AndroidWebViewPackage()
+//          new AndroidWebViewPackage(null)
+//          new AndroidWebViewPackage()
+//          new WebViewPackage(),
+//          new ImagePickerPackage()
       );
     }
   };

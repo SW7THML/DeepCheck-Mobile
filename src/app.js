@@ -32,8 +32,6 @@ const getSceneStyle = (/* NavigationSceneRendererProps */ props, computedProps) 
 };
 
 // tabs
-var Web = require('./views/web');
-
 import TabIcon from './views/tab_icon';
 
 class App extends React.Component {
@@ -72,6 +70,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
+    window.before_url = "";
     Linking.removeEventListener('url', this.handleOpenURL);
   }
 

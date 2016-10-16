@@ -10,9 +10,13 @@ var {
   WebView
 } = ReactNative;
 
+//var WebViewAndroid = require('react-native-webview-android');
+import AndroidWebView from '../AndroidWebView'
+//var WebView = require('react-native-webview');
+
 var Constant = require('../constant');
 
-var WEBVIEW_REF = 'webview_1';
+var WEBVIEW_REF = 'webview_2';
 
 var Page = React.createClass({
   getInitialState: function() {
@@ -35,6 +39,8 @@ var Page = React.createClass({
   },
 
   backHandler: function() {
+    console.log('back handler');
+    //console.log(this.refs);
     if(this.state.canGoBack) {
       this.refs[WEBVIEW_REF].goBack();
       return true;
@@ -44,15 +50,19 @@ var Page = React.createClass({
   },
 
   componentDidMount: function() {
+    console.log('mount');
     ReactNative.BackAndroid.addEventListener('hardwareBackPress', this.backHandler);
+    console.log('end');
   },
 
   componentWillUnmount: function() {
+    console.log('unmount');
      ReactNative.BackAndroid.removeEventListener('hardwareBackPress', this.backHandler);
+    console.log('end');
   },
 
   onNavigationStateChange: function(navState) {
-    console.log("changed", navState);
+    console.log("nav changed", navState);
     this.setState({
       canGoBack: navState.canGoBack
     })
@@ -64,7 +74,7 @@ var Page = React.createClass({
 
   render: function() {
     return (
-      <WebView
+      <AndroidWebView
         ref={WEBVIEW_REF}
         automaticallyAdjustContentInsets={false}
         javaScriptEnabled={true}
